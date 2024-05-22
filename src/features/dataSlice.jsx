@@ -23,7 +23,7 @@ export const fetchProjects = () => async (dispatch) => {
   try {
     
     const response = await axios.get(
-      "http://127.0.0.1:8000/bd/project/list/"
+      "https://bdashboard-1c6c04306519.herokuapp.com/bd/project/list/"
     );
 
     dispatch(setProjects(response.data));
@@ -37,7 +37,7 @@ export const fetchClients = () => async (dispatch) => {
   try {
     
     const response = await axios.get(
-      "http://127.0.0.1:8000/bd/client/list/"
+      "https://bdashboard-1c6c04306519.herokuapp.com/bd/client/list/"
     );
 
     dispatch(setClients(response.data));
