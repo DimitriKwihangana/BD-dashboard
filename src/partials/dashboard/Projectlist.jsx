@@ -90,6 +90,9 @@ function ProjectList() {
                       <div className="font-semibold text-center text-base">project Value/Rwf</div>
                     </th>
                     <th className="p-2 whitespace-nowrap">
+                      <div className="font-semibold text-center text-base">Total Invoiced</div>
+                    </th>
+                    <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-center text-base">Delivery Date</div>
                     </th>
                     <th className="p-2 whitespace-nowrap">
@@ -120,6 +123,9 @@ function ProjectList() {
                       </td>
                       <td className="p-2 whitespace-nowrap">
                         <div className="text-lg text-center text-green-500 p-2">{numberWithCommas(project.contract)}</div>
+                      </td>
+                      <td className="p-2 whitespace-nowrap">
+                        <div className="text-lg text-center text-green-500 p-2">{numberWithCommas(project.financialcontract)}</div>
                       </td>
                       <td className="p-2 whitespace-nowrap">
                         <div className="text-lg text-center text-blue-500 p-2">{project.deliverydate}</div>
