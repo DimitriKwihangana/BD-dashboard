@@ -13,6 +13,7 @@ import CardWinrate from "./winrate";
 import ClusteredBarchat1 from "./longcluster";
 import DropdownCou from "./dropdown";
 import { Link } from "react-router-dom";
+import Invoiced from "./invoiced";
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -360,6 +361,7 @@ setPrepipeline(PrePipeline)
                   <FinancialProposal amount={contractvalue} />
                   <CurrentSales />
                   <Meet />
+                  <Invoiced />
                 </div>
                 <div className="w-full sm:w-1/2 p-4">
                   <ChartThree contract={contractvalue}  sales={sales} Deficit={deficit}/>

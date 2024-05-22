@@ -10,7 +10,7 @@ const FinancialProposal= ({amount}) => {
     
   return (
     
-   <div className=' col-span-12 rounded-sm border border-stroke bg-white px-5 pt-6  pb-2 shadow-default dark:border-strokedark dark:bg-boxdark  xl:col-span-8'>
+   <div className=' col-span-12 rounded-sm border border-stroke bg-white px-5  pb-2 shadow-default dark:border-strokedark dark:bg-boxdark  xl:col-span-8'>
     <div className='flex  justify-between '>
 
  <h2 className='font-bold text-base  text-[#087ABC] '>Total Contract Value</h2>

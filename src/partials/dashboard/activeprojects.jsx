@@ -171,6 +171,7 @@ function Active() {
                 <div className="text-lg font-semibold mb-2">Delivery date</div>
                 <input
                   value={deliveryDate}
+                  type='date'
                   onChange={(e) => setDeliveryDate(e.target.value)}
                   className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md'
                 />

@@ -5,14 +5,16 @@ import { useCallback } from "react";
 import { useEffect } from 'react';
 import Sidebar from '../Sidebar';
 import Swal from 'sweetalert2';
-
+import axios from 'axios';
 function Submitted() {
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('');
-
+  const [contractValue, setContractValue] = useState('');
+  const [deliveryDate, setDeliveryDate] = useState('');
+  
   const numberWithCommas = (number) => {
     if (number === null) return ""; // Return an empty string if number is null
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -29,33 +31,56 @@ function Submitted() {
 
   const clients = useSelector((state) => state.data.clients);
   const projects = useSelector((state) => state.data.projects);
+  
 
   const ProjectsFilter = projects.filter(project => project.status === 'Waiting');
   console.log(clients,'clients')
   
-  const getClientName = (clientId) => {
+const getClientName = (clientId) => {
     const client = clients.find(client => client.id === clientId);
    
     return client ? client.client_name : 'Unknown Client';
   };
 
-  const handleUpdateStatus = () => {
-    // Implement your update logic here, using selectedProject.id and selectedStatus
-    // For example, you can dispatch an action to update the status in the Redux store
-    console.log("Updating status:", selectedStatus);
-    // Reset modal state
-    setShowModal(false);
-    setSelectedProject(null);
-    setSelectedStatus('');
+  const handleUpdateStatus = async () => {
 
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Project updated",
-      showConfirmButton: false,
-      timer: 1500
-    });
+    console.log(selectedProject.id, 'id')
+    const updatedProject = {
+      ...selectedProject,
+      status: selectedStatus,
+      financialcontract: contractValue,
+      deliverydate: deliveryDate
+    };
 
+    try {
+      const response = await axios.put(`https://bdashboard-1c6c04306519.herokuapp.com/bd/project/update/${selectedProject.id}/`, updatedProject);
+
+  
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Project updated",
+        showConfirmButton: false,
+        timer: 1500
+      });
+ console.log(response)
+      // Reset modal state
+      setShowModal(false);
+      setSelectedProject(null);
+      setSelectedStatus('');
+      setContractValue('');
+      setDeliveryDate('');
+    } catch (error) {
+      console.error('Failed to update the project:', error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Failed to update project",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
   };
 
   return (
@@ -118,10 +143,13 @@ function Submitted() {
                       </td>
                      
                       <td className="p-2 whitespace-nowrap flex justify-center">
-                        <button
+                      <button
                           onClick={() => {
                             setShowModal(true);
                             setSelectedProject(project);
+                            setSelectedStatus(project.status);
+                            setContractValue(project.financialcontract || null);
+                            setDeliveryDate(project.deliverydate || null);
                           }}
                           className='bg-[#087ABC] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                         >
@@ -153,6 +181,7 @@ function Submitted() {
                   className="block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md"
                 >
                   <option value="">Select Status</option>
+                  <option value="Waiting">Waiting</option>
                   <option value="Onhold">Onhold</option>
                   <option value="Project">Project</option>
                   <option value="Cancelled">Cancelled</option>
@@ -160,11 +189,19 @@ function Submitted() {
                   {/* Add more options as needed */}
                 </select>
                 <div className="text-lg font-semibold mb-2">Update Contract Value</div>
-                <input className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md' />
+                <input
+                  value={contractValue}
+                  onChange={(e) => setContractValue(e.target.value)}
+                  className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md'
+                />
                 <div className="text-lg font-semibold mb-2">Delivery date</div>
-                <input className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md' />
+                <input
+                  value={deliveryDate}
+                  type='date'
+                  onChange={(e) => setDeliveryDate(e.target.value)}
+                  className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md'
+                />
               </div>
-              
               <div className="px-6 py-4 flex justify-end">
                 <button
                   onClick={handleUpdateStatus}

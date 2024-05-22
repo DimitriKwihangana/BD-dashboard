@@ -95,6 +95,9 @@ function ProjectList() {
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-center  text-base">Update status</div>
                     </th>
+                    <th className="p-2 whitespace-nowrap">
+                      <div className="font-semibold text-center  text-base">Count</div>
+                    </th>
                   </tr>
                 </thead>
                 {/* Table body */}
@@ -132,6 +135,8 @@ function ProjectList() {
                           Update
                         </button>
                       </td>
+                      
+                      <td className='justify-end'>  <input className=' mx-6' type='checkbox' checked/> </td>
                     </tr>
                   ))}
                 </tbody>
