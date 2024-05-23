@@ -42,7 +42,7 @@ const Clients = () => {
   const createClient = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/bd/client/create/",
+        "http://127.0.0.1:8000/indicators/client/create/",
         {
           client_name: clientName,
           client_type: clientType,

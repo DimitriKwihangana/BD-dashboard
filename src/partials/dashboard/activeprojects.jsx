@@ -40,7 +40,7 @@ function Active() {
     };
 
     try {
-      const response = await axios.put(`https://bdashboard-1c6c04306519.herokuapp.com/bd/project/update/${selectedProject.id}/`, updatedProject);
+      const response = await axios.put(`https://databankvanguard-b3d326c04ab4.herokuapp.com/indicators/project/update/${selectedProject.id}/`, updatedProject);
 
   
 

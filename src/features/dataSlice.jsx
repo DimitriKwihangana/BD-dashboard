@@ -23,7 +23,7 @@ export const fetchProjects = () => async (dispatch) => {
   try {
     
     const response = await axios.get(
-      "https://bdashboard-1c6c04306519.herokuapp.com/bd/project/list/"
+      "https://databankvanguard-b3d326c04ab4.herokuapp.com/indicators/project/list/"
     );
 
     dispatch(setProjects(response.data));
@@ -37,7 +37,7 @@ export const fetchClients = () => async (dispatch) => {
   try {
     
     const response = await axios.get(
-      "https://bdashboard-1c6c04306519.herokuapp.com/bd/client/list/"
+      "https://databankvanguard-b3d326c04ab4.herokuapp.com/indicators/client/list/"
     );
 
     dispatch(setClients(response.data));

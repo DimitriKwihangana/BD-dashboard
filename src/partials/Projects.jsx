@@ -139,7 +139,7 @@ setLoading(true)
   
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/bd/project/create/",
+      "http://127.0.0.1:8000/indicators/project/create/",
       {
         name: thename,
         type: type,
