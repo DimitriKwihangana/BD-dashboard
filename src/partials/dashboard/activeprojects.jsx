@@ -30,6 +30,12 @@ function Active() {
     ["EOI", "Competitive", "GrantApplication", "Singlesourcing", "Proposal"].includes(project.status)
   );
 
+  const getClientName = (clientId) => {
+    const client = clients.find(client => client.id === clientId);
+   
+    return client ? client.client_name : 'Unknown Client';
+  };
+
   const handleUpdateStatus = async () => {
     console.log(selectedProject.id, 'id')
     const updatedProject = {
@@ -84,8 +90,11 @@ function Active() {
               <table className="table-auto w-full">
                 <thead className="text-xs font-semibold uppercase text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-700 dark:bg-opacity-50">
                   <tr>
+                  <th className="p-2 whitespace-nowrap">
+                      <div className="font-semibold text-left">Client Name</div>
+                    </th>
                     <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-left">Name</div>
+                      <div className="font-semibold text-left">Project Name</div>
                     </th>
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-left">Sector</div>
@@ -104,6 +113,11 @@ function Active() {
                 <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-700">
                   {submitted.map(project => (
                     <tr key={project.id}>
+                      <td className="p-2 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="font-medium text-slate-800 dark:text-slate-100">{getClientName(project.client)}</div>
+                        </div>
+                      </td>
                       <td className="p-2 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="font-medium text-slate-800 dark:text-slate-100">{project.name}</div>

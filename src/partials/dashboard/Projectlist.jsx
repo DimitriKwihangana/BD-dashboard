@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClients, fetchProjects } from '../../features/dataSlice';
-import { useCallback } from "react";
-import { useEffect } from 'react';
 import Sidebar from '../Sidebar';
 import Swal from 'sweetalert2';
 
-function ProjectList() {
+function ProjectList({ setTotalFinancialContract }) { 
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('');
+  const projects = useSelector((state) => state.data.projects);
+  const ProjectsFilter = projects.filter(project => project.status === 'Project');
+  const [checkedProjects, setCheckedProjects] = useState([]);
+  
 
   const numberWithCommas = (number) => {
     if (number === null) return ""; // Return an empty string if number is null
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-
+  
   const handleFetchProjects = useCallback(() => {
+    
     dispatch(fetchProjects());
     dispatch(fetchClients());
   }, [dispatch]);
@@ -28,20 +31,17 @@ function ProjectList() {
   }, [handleFetchProjects]);
 
   const clients = useSelector((state) => state.data.clients);
-  const projects = useSelector((state) => state.data.projects);
+ 
 
-  const ProjectsFilter = projects.filter(project => project.status === 'Project');
-  console.log(clients,'clients')
-  
+ 
+
   const getClientName = (clientId) => {
     const client = clients.find(client => client.id === clientId);
-   
     return client ? client.client_name : 'Unknown Client';
   };
 
   const handleUpdateStatus = () => {
     // Implement your update logic here, using selectedProject.id and selectedStatus
-    // For example, you can dispatch an action to update the status in the Redux store
     console.log("Updating status:", selectedStatus);
     // Reset modal state
     setShowModal(false);
@@ -55,8 +55,34 @@ function ProjectList() {
       showConfirmButton: false,
       timer: 1500
     });
-
   };
+
+  const handleCheckProject = (projectId) => {
+    setCheckedProjects((prev) =>
+      prev.includes(projectId)
+        ? prev.filter((id) => id !== projectId)
+        : [...prev, projectId]
+    );
+    console.log(checkedProjects,'checked projects')
+  };
+
+  const handleCheckAll = () => {
+    if (checkedProjects.length === ProjectsFilter.length) {
+      setCheckedProjects([]);
+    } else {
+      setCheckedProjects(ProjectsFilter.map((project) => project.id));
+    }
+  };
+
+  const totalFinancialContract = ProjectsFilter.reduce((sum, project) => {
+    return checkedProjects.includes(project.id) ? sum + project.contract : sum;
+  }, 0);
+
+  // Call setTotalFinancialContract to update the state in the parent component
+  useEffect(() => {
+    setTotalFinancialContract(totalFinancialContract);
+    
+  }, [totalFinancialContract, setTotalFinancialContract]);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -67,7 +93,10 @@ function ProjectList() {
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden m-5">
         <div className="col-span-full xl:col-span-6 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 ">
           <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
-            <h2 className="font-semibold text-slate-800 dark:text-slate-100">Running  Projects</h2>
+            <h2 className="font-semibold text-slate-800 dark:text-slate-100">Running Projects</h2>
+            <div className="mt-2 text-lg font-semibold">
+              Total Financial Contract: {numberWithCommas(totalFinancialContract)}
+            </div>
           </header>
           <div className="p-3">
             {/* Table */}
@@ -76,6 +105,11 @@ function ProjectList() {
                 {/* Table header */}
                 <thead className="text-xs font-semibold uppercase text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-700 dark:bg-opacity-50">
                   <tr>
+                    <th className="p-2 whitespace-nowrap">
+                      <div className="font-semibold text-left text-base">
+                        <input type="checkbox" onChange={handleCheckAll} checked={checkedProjects.length === ProjectsFilter.length} />
+                      </div>
+                    </th>
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-left text-base">Client Name</div>
                     </th>
@@ -87,7 +121,7 @@ function ProjectList() {
                     </th>
 
                     <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-center text-base">project Value/Rwf</div>
+                      <div className="font-semibold text-center text-base">Project Value/Rwf</div>
                     </th>
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-center text-base">Total Invoiced</div>
@@ -96,24 +130,27 @@ function ProjectList() {
                       <div className="font-semibold text-center text-base">Delivery Date</div>
                     </th>
                     <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-center  text-base">Update status</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-center  text-base">Count</div>
+                      <div className="font-semibold text-center text-base">Update Status</div>
                     </th>
                   </tr>
                 </thead>
                 {/* Table body */}
                 <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-700">
                   {ProjectsFilter.map((project) => (
-
                     <tr key={project.id}>
-                      <td className="p-2  flex-wrap">
+                      <td className="p-2 whitespace-nowrap flex justify-center">
+                        <input
+                          type="checkbox"
+                          checked={checkedProjects.includes(project.id)}
+                          onChange={() => handleCheckProject(project.id)}
+                        />
+                      </td>
+                      <td className="p-2 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className=" text-slate-800  font-bold dark:text-slate-100">{getClientName(project.client)}</div>
+                          <div className="text-slate-800 font-bold dark:text-slate-100">{getClientName(project.client)}</div>
                         </div>
                       </td>
-                      <td className="p-2  flex-wrap">
+                      <td className="p-2 flex-wrap">
                         <div className="flex items-center">
                           <div className="font-medium text-slate-800 dark:text-slate-100">{project.name}</div>
                         </div>
@@ -141,8 +178,6 @@ function ProjectList() {
                           Update
                         </button>
                       </td>
-                      
-                      <td className='justify-end'>  <input className=' mx-6' type='checkbox' checked/> </td>
                     </tr>
                   ))}
                 </tbody>
@@ -177,16 +212,16 @@ function ProjectList() {
               </div>
               <div className="px-6 py-4 flex justify-end">
                 <button
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 font-bold py-2 px-4 rounded mr-2"
+                >
+                  Cancel
+                </button>
+                <button
                   onClick={handleUpdateStatus}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                 >
                   Update
-                </button>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="ml-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-                >
-                  Cancel
                 </button>
               </div>
             </div>

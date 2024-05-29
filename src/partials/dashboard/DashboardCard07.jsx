@@ -115,7 +115,7 @@ function DashboardCard07({waiting, active, failed, prepipeline}) {
                   </Link>
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td className="p-2">
                   <Link to="/failed">
                     <div className="flex items-center">
@@ -134,7 +134,7 @@ function DashboardCard07({waiting, active, failed, prepipeline}) {
                     <div className="text-center text-emerald-500"></div>
                   </Link>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
