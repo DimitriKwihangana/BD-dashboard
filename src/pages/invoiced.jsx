@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Invoiced= () => {
+const Invoiced= ({amount}) => {
     const numberWithCommas = (number) => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       };
-      const amount = 0
+     
   return (
     
    <div className=' col-span-12 rounded-sm border border-stroke bg-white px-5  pb-2 shadow-default dark:border-strokedark dark:bg-boxdark  xl:col-span-8 mt-2'>

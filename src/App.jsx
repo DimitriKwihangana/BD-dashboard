@@ -12,6 +12,7 @@ import Submitted from './partials/dashboard/submitted';
 import Failed from './partials/dashboard/failed';
 import ProjectList from './partials/dashboard/Projectlist';
 import Active from './partials/dashboard/activeprojects';
+
 function App() {
   const location = useLocation();
   useEffect(() => {
@@ -21,16 +22,22 @@ function App() {
   }, [location.pathname]); // triggered on route change
 
   const [totalFinancialContract, setTotalFinancialContract] = useState(0);
-  console.log(totalFinancialContract,'ddd')
+  const [totalmoneyInvoiced, setTotalMoneyInvoiced] = useState(0)
+  console.log(totalmoneyInvoiced,'ddd')
+
+  function minimize (value){
+    const billion = value/1e9
+    return billion.toFixed(2)
+  }
 
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/" element={<Dashboard contractmoney={minimize(totalFinancialContract)} invoiced={minimize(totalmoneyInvoiced)} />} />
         <Route path="/register/projects" element={<Projects />} />
         <Route path="/register/clients" element={<Clients />} />
         <Route path="/prepipeline" element={<Prepipeline />} />
-        <Route path="/listpro" element={<ProjectList setTotalFinancialContract={setTotalFinancialContract} />} /> {/* Add this route */}
+        <Route path="/listpro" element={<ProjectList setTotalFinancialContract={setTotalFinancialContract}  setTotalMoneyInvoiced={setTotalMoneyInvoiced}/>} /> {/* Add this route */}
         <Route path="/waiting" element={<Submitted />} />
         <Route path="/failed" element={<Failed />} />
         <Route path="/active" element={<Active />} />

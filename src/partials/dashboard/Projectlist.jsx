@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchClients, fetchProjects } from '../../features/dataSlice';
 import Sidebar from '../Sidebar';
 import Swal from 'sweetalert2';
+import Invoiced from '../../pages/invoiced';
+import axios from 'axios';
 
-function ProjectList({ setTotalFinancialContract }) { 
+function ProjectList({ setTotalFinancialContract, setTotalMoneyInvoiced }) { 
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -13,7 +15,9 @@ function ProjectList({ setTotalFinancialContract }) {
   const projects = useSelector((state) => state.data.projects);
   const ProjectsFilter = projects.filter(project => project.status === 'Project');
   const [checkedProjects, setCheckedProjects] = useState([]);
-  
+  const [contract, setContract]= useState(0)
+  const [financialcontract, setFinancialContract] = useState(0)
+  const [deliverydate, setDeliveryDate] = useState('')
 
   const numberWithCommas = (number) => {
     if (number === null) return ""; // Return an empty string if number is null
@@ -31,32 +35,50 @@ function ProjectList({ setTotalFinancialContract }) {
   }, [handleFetchProjects]);
 
   const clients = useSelector((state) => state.data.clients);
- 
-
- 
 
   const getClientName = (clientId) => {
     const client = clients.find(client => client.id === clientId);
     return client ? client.client_name : 'Unknown Client';
   };
 
-  const handleUpdateStatus = () => {
-    // Implement your update logic here, using selectedProject.id and selectedStatus
-    console.log("Updating status:", selectedStatus);
-    // Reset modal state
-    setShowModal(false);
-    setSelectedProject(null);
-    setSelectedStatus('');
+  const handleUpdateStatus = async () => {
+    
+    console.log(selectedProject.id, 'id')
+    const updatedProject = {
+      ...selectedProject,
+      status: selectedStatus,
+      contract: contract,
+      deliverydate: deliverydate,
+      financialcontract:financialcontract
+    };
 
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Project updated",
-      showConfirmButton: false,
-      timer: 1500
-    });
+    try {
+      const response = await axios.put(`https://databankvanguard-b3d326c04ab4.herokuapp.com/indicators/project/update/${selectedProject.id}/`, updatedProject);
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Project updated",
+        showConfirmButton: false,
+        timer: 1500
+      });
+ console.log(response)
+      // Reset modal state
+      setShowModal(false);
+      setSelectedProject(null);
+      setSelectedStatus('');
+      setDeliveryDate('');
+    } catch (error) {
+      console.error('Failed to update the project:', error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Failed to update project",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
   };
-
   const handleCheckProject = (projectId) => {
     setCheckedProjects((prev) =>
       prev.includes(projectId)
@@ -78,11 +100,15 @@ function ProjectList({ setTotalFinancialContract }) {
     return checkedProjects.includes(project.id) ? sum + project.contract : sum;
   }, 0);
 
+  const totalInvoiced = ProjectsFilter.reduce((sum, project) => {
+    return checkedProjects.includes(project.id) ? sum + project.financialcontract : sum;
+  }, 0);
   // Call setTotalFinancialContract to update the state in the parent component
   useEffect(() => {
     setTotalFinancialContract(totalFinancialContract);
-    
-  }, [totalFinancialContract, setTotalFinancialContract]);
+    setTotalMoneyInvoiced(totalInvoiced)
+     
+  }, [totalFinancialContract, totalInvoiced,setTotalFinancialContract, setTotalMoneyInvoiced]);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -97,6 +123,10 @@ function ProjectList({ setTotalFinancialContract }) {
             <div className="mt-2 text-lg font-semibold">
               Total Financial Contract: {numberWithCommas(totalFinancialContract)}
             </div>
+            <div className="mt-2 text-lg font-semibold">
+              Total Invoiced Money: {numberWithCommas(totalInvoiced)}
+            </div>
+           
           </header>
           <div className="p-3">
             {/* Table */}
@@ -119,7 +149,6 @@ function ProjectList({ setTotalFinancialContract }) {
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-left text-base">Sector</div>
                     </th>
-
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-center text-base">Project Value/Rwf</div>
                     </th>
@@ -171,7 +200,11 @@ function ProjectList({ setTotalFinancialContract }) {
                         <button
                           onClick={() => {
                             setShowModal(true);
+                            setSelectedStatus(project.status);
                             setSelectedProject(project);
+                            setContract(project.contract)
+                            setFinancialContract(project.financialcontract)
+                            setDeliveryDate(project.deliverydate)
                           }}
                           className='bg-[#087ABC] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                         >
@@ -186,7 +219,7 @@ function ProjectList({ setTotalFinancialContract }) {
           </div>
         </div>
       </div>
-
+      
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -203,25 +236,45 @@ function ProjectList({ setTotalFinancialContract }) {
                   className="block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md"
                 >
                   <option value="">Select Status</option>
-                  <option value="Onhold">Onhold</option>
                   <option value="Finalised">Finalised</option>
+                  <option value="Onhold">Onhold</option>
+                  <option value="Project">Project</option>
                   <option value="Cancelled">Cancelled</option>
                   <option value="Failed">Failed</option>
                   {/* Add more options as needed */}
                 </select>
+                <div className="text-lg font-semibold mb-2">Contract Value</div>
+                <input              
+                  value={contract}
+                  onChange={(e) => setContract(e.target.value)}
+                  className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md'
+                />
+                <div className="text-lg font-semibold mb-2">Invoiced Value</div>
+                <input
+                  value={financialcontract}
+                  onChange={(e) => setFinancialContract(e.target.value)}
+                  className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md'
+                />
+                <div className="text-lg font-semibold mb-2">Delivery date</div>
+                <input
+                  value={deliverydate}
+                  type='date'
+                  onChange={(e) => setDeliveryDate(e.target.value)}
+                  className='block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md'
+                />
               </div>
               <div className="px-6 py-4 flex justify-end">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 font-bold py-2 px-4 rounded mr-2"
-                >
-                  Cancel
-                </button>
                 <button
                   onClick={handleUpdateStatus}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                 >
                   Update
+                </button>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="ml-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+                >
+                  Cancel
                 </button>
               </div>
             </div>

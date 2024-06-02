@@ -8,13 +8,13 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 ChartJS.register(ChartDataLabels);
-const ChartThree = ({ contract, sales, Deficit }) => {
+const ChartThree = ({ contract, sales, Invoiced }) => {
   const data = {
-    labels: ["T.Contract Value", "Sales Target", "Deficit"],
+    labels: ["T.Contract Value", "Sales Target", "Total Invoiced"],
     datasets: [
       {
         label: "Financial Status",
-        data: [contract, sales, Deficit],
+        data: [contract, sales, Invoiced],
         backgroundColor: ["#087ABC", "#8CCF98", "#7F7F7F"],
         hoverBackgroundColor: ["#087ABC", "#8CCF98", "#7F7F7F"],
         borderWidth: 1,

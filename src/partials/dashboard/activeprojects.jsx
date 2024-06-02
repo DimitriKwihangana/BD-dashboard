@@ -37,18 +37,17 @@ function Active() {
   };
 
   const handleUpdateStatus = async () => {
+    
     console.log(selectedProject.id, 'id')
     const updatedProject = {
       ...selectedProject,
       status: selectedStatus,
-      financialcontract: contractValue,
+      contract: contractValue,
       deliverydate: deliveryDate
     };
 
     try {
       const response = await axios.put(`https://databankvanguard-b3d326c04ab4.herokuapp.com/indicators/project/update/${selectedProject.id}/`, updatedProject);
-
-  
 
       Swal.fire({
         position: "center",
@@ -103,7 +102,7 @@ function Active() {
                       <div className="font-semibold text-left">Status</div>
                     </th>
                     <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-center">Financial contract</div>
+                      <div className="font-semibold text-center">contract value</div>
                     </th>
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-center text-base">Update status</div>
@@ -130,7 +129,7 @@ function Active() {
                         <div className="text-left font-medium text-green-500">{project.status}</div>
                       </td>
                       <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center">{project.financialcontract}</div>
+                        <div className="text-lg text-center">{project.contract}</div>
                       </td>
                       <td className="p-2 whitespace-nowrap flex justify-center">
                         <button

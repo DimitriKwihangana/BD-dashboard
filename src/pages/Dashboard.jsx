@@ -15,7 +15,8 @@ import DropdownCou from "./dropdown";
 import { Link } from "react-router-dom";
 import Invoiced from "./invoiced";
 
-function Dashboard() {
+function Dashboard({contractmoney, invoiced}) {
+  
   const dispatch = useDispatch();
   const handleFetchProjects = useCallback(() => {
     dispatch(fetchProjects());
@@ -107,10 +108,6 @@ setPrepipeline(PrePipeline)
   const Agriculture = countProjectsBySector(theprojects, "Agriculture");
   const Private = countProjectsBySector(theprojects, "private");
 
-
-    
-    
-
     setUseractive(prevState => ({
       ...prevState,
       datasets: [
@@ -130,17 +127,10 @@ setPrepipeline(PrePipeline)
       ],
     }));
 
-
     // counting total contract value
 
-    const totalContract = ProjectsFilter.reduce((sum, project) => sum + project.contract, 0);
+    
 
-    const totalContractInBillions = (totalContract / 1e9).toFixed(1);
-    setContractValue(totalContractInBillions)
-
-   
-
-   
 // counting in quaters
 
  const q1Projects = [];
@@ -195,14 +185,10 @@ setPrepipeline(PrePipeline)
 
   }, [projects, ProjectsFilter]); 
 
-
   // Extract counts for each status
-  
+
   // Calculate sums
   
-
-
-
   // Continue with calculations for other statuses
 
   const xTitleGraph = "Grades";
@@ -317,7 +303,7 @@ setPrepipeline(PrePipeline)
     ],
   });
   const sales = 5
-  const deficit = 0
+  const deficit =  sales - contractmoney
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -358,13 +344,13 @@ setPrepipeline(PrePipeline)
               <p className="text-center text-2xl">Financial Status/ Rwf Billion </p>
               <div className="flex justify-center flex-wrap">
                 <div className="w-full sm:w-1/2 p-4">
-                  <FinancialProposal amount={contractvalue} />
+                  <FinancialProposal amount={contractmoney} />
                   <CurrentSales />
-                  <Meet />
-                  <Invoiced />
+                  <Meet  deficit={deficit}/>
+                  <Invoiced  amount={invoiced}/>
                 </div>
                 <div className="w-full sm:w-1/2 p-4">
-                  <ChartThree contract={contractvalue}  sales={sales} Deficit={deficit}/>
+                  <ChartThree contract={contractmoney}  sales={sales} Invoiced={invoiced}/>
                 </div>
               </div>
             </div>
