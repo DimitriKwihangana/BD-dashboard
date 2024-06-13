@@ -108,7 +108,7 @@ function ClusteredBarchat1({ chartData, yTitle, xTitle, unit, legend, lgd}) {
   };
 
   return (
-    <div  style={{ height: "250px", width: "680px", backgroundColor: 'white', padding:0  }}>
+    <div  style={{ height: "300px", width: "680px", backgroundColor: 'white', padding:0  }}>
      
       <h1  style={{ color: "black", fontWeight: "700" , textAlign:'center', marginBottom:-20}}>
         {yTitle}

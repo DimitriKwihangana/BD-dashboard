@@ -14,7 +14,7 @@ const Projects = () => {
     { label: "Research", value: "Research" },
     { label: "Strategy", value: "Strategy" },
     { label: "M&E", value: "M&E" },
-    { label: "IMplementation", value: "IMplementation" },
+    { label: "Implementation", value: "Implementation" },
     { label: "Other", value: "Other" },
   ];
   const win = [
@@ -33,7 +33,7 @@ const Projects = () => {
     { label: "Failed", value: "Failed" },
     { label: "Cancelled", value: "Cancelled" },
     { label: "Prepipeline", value: "Prepipeline" },
-    { label: "Concept", value: "Concept" },
+    { label: "Concept Note", value: "Concept Note" },
     { label: "Singlesourcing", value: "Singlesourcing"},
     { label: "Project", value: "Project"},
     
@@ -169,6 +169,7 @@ setLoading(true)
 };
 
   return (
+    
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -205,7 +206,7 @@ setLoading(true)
                     <Select options={clientss}
                     onChange={handleClients}
                     
-                    C/>
+                    />
                   </div>{" "}
                   <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">

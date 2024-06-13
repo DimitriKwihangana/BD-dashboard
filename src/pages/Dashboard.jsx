@@ -14,7 +14,7 @@ import ClusteredBarchat1 from "./longcluster";
 import DropdownCou from "./dropdown";
 import { Link } from "react-router-dom";
 import Invoiced from "./invoiced";
-
+import './act.css'
 function Dashboard({contractmoney, invoiced}) {
   
   const dispatch = useDispatch();
@@ -306,176 +306,167 @@ setPrepipeline(PrePipeline)
   const deficit =  sales - contractmoney
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar />
+    <div className="flex h-screen overflow-hidden bg-image">
+  {/* Sidebar */}
+  <Sidebar />
 
-      {/* Content area */}
-      <div className="relative flex flex-col flex-1 p-3 overflow-y-auto overflow-x-hidden">
-        <main className="flex-grow">
-          <h2 className="text-center text-3xl text-black font-mono font-bold mr-6">
-            <DropdownCou onOptionSelect={handleOptionSelect} />
-            BUSINESS'S STATUS
-          </h2>{" "}
-          <div className="flex justify-center items-center h-full">
-            <div className="flex-1 h-full bg-blue-50">
-              <h2 className="text-center text-2xl text-[#087ABC]">BIDDING PROPOSALS</h2>{" "}
-              <div className="flex justify-center flex-wrap">
-                <div className="w-full sm:w-1/2 p-1">
-                  <DashboardCard07
-                   waiting={waitingcount}
-                   active={active}
-                   failed={failed}
-                   prepipeline={prepipeline}
-                  />
-                </div>
-                <div className="w-full sm:w-1/2 p-1">
-                  <ClusteredBarchat
-                    chartData={useractive}
-                    xTitle={xTitleGraph}
-                    unit={"5"}
-                    legend={false}
-                    lgd={showlegend}
-                    yTitle="Active Bids"
-                    product={"Grain"}
-                  />
-                </div>
-              </div>
-              <p className="text-center text-2xl">Financial Status/ Rwf Billion </p>
-              <div className="flex justify-center flex-wrap">
-                <div className="w-full sm:w-1/2 p-4">
-                  <FinancialProposal amount={contractmoney} />
-                  <CurrentSales />
-                  <Meet  deficit={deficit}/>
-                  <Invoiced  amount={invoiced}/>
-                </div>
-                <div className="w-full sm:w-1/2 p-4">
-                  <ChartThree contract={contractmoney}  sales={sales} Invoiced={invoiced}/>
-                </div>
-              </div>
+  {/* Content area */}
+  <div className="relative flex flex-col flex-1 p-3 overflow-y-auto overflow-x-hidden">
+    <main className="flex-grow">
+      <h2 className="text-center text-3xl text-black font-mono font-bold mr-6 ">
+        <DropdownCou onOptionSelect={handleOptionSelect} />
+        BUSINESS'S STATUS
+      </h2>
+      <div className="flex justify-center items-center h-full">
+        <div className="flex-1 h-full bg-blue-50 bg-opacity-0">
+          <h2 className="text-center text-2xl text-[#ffffff]  font-bold">BIDDING PROPOSALS</h2>
+          <div className="flex justify-center flex-wrap">
+            <div className="w-full sm:w-1/2 p-1">
+              <DashboardCard07
+                waiting={waitingcount}
+                active={active}
+                failed={failed}
+                prepipeline={prepipeline}
+              />
             </div>
-            <div className="flex-1 h-full bg-green-50">
-              <Link to='/listpro'><h2 className="text-center text-2xl text-green-700">
-                <span> {countprojects} </span> PROJECTS
-              </h2>{" "}</Link>
-              <div className="flex justify-center flex-wrap">
-                <div className="w-full pl-4 ">
-                  <ClusteredBarchat1
-                    chartData={usersector}
-                    xTitle={xTitleGraph}
-                    unit={"t"}
-                    legend={legend}
-                    lgd={showlegend}
-                    yTitle="Sector"
-                    product={"Grain"}
-                  />
+            <div className="w-full sm:w-1/2 p-1">
+              <ClusteredBarchat
+                chartData={useractive}
+                xTitle={xTitleGraph}
+                unit={"5"}
+                legend={false}
+                lgd={showlegend}
+                yTitle="Active Bids"
+                product={"Grain"}
+              />
+            </div>
+          </div>
+          <p className="text-center text-2xl  text-white font-bold">Financial Status/ Rwf Billion</p>
+          <div className="flex justify-center flex-wrap">
+            <div className="w-full sm:w-1/2 p-4">
+              <FinancialProposal amount={contractmoney} />
+              <CurrentSales />
+              <Meet deficit={deficit} />
+              <Invoiced amount={invoiced} />
+            </div>
+            <div className="w-full sm:w-1/2 p-4">
+              <ChartThree contract={contractmoney} sales={sales} Invoiced={invoiced} />
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 h-full bg-green-50 bg-opacity-0">
+          <Link to='/listpro'>
+            <h2 className="text-center text-2xl text-white  font-bold">
+              <span> {countprojects} </span> PROJECTS
+            </h2>
+          </Link>
+          <div className="flex justify-center flex-wrap">
+            <div className="w-full pl-4">
+              <ClusteredBarchat1
+                chartData={usersector}
+                xTitle={xTitleGraph}
+                unit={"t"}
+                legend={legend}
+                lgd={showlegend}
+                yTitle="Sector"
+                product={"Grain"}
+              />
+            </div>
+            <div className="w-full p-4" onClick={() => setShowModal(true)}>
+              <ClusteredBarchat1
+                chartData={userproject}
+                xTitle={xTitleGraph}
+                unit={"3"}
+                legend={legend}
+                lgd={showlegend}
+                yTitle="Project Duration"
+                product={"Grain"}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      {showModal && (
+        <div className="fixed inset-0 z-10 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <div className="relative bg-white dark:bg-slate-800 rounded-lg overflow-hidden shadow-xl transform transition-all">
+              <div className="px-6 py-4">
+                <div className="text-lg font-semibold mb-2">Project Duration</div>
+                <div className="mb-4">
+                  <p className="font-bold text-black text-lg">Quarter 1</p>
+                  <ul className="list-disc pl-5">
+                    {Q1.map((project, index) => (
+                      <li key={index}>
+                        <span className="font-bold">{project.name}</span>
+                        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div className="w-full  p-4"
-                      onClick={() => setShowModal(true)}
+                <div className="mb-4">
+                  <p className="font-bold text-black text-lg">Quarter 2</p>
+                  <ul className="list-disc pl-5">
+                    {Q2.map((project, index) => (
+                      <li key={index}>
+                        <span className="font-bold">{project.name}</span>
+                        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mb-4">
+                  <p className="font-bold text-black text-lg">Quarter 3</p>
+                  <ul className="list-disc pl-5">
+                    {Q3.map((project, index) => (
+                      <li key={index}>
+                        <span className="font-bold">{project.name}</span>
+                        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mb-4">
+                  <p className="font-bold text-black text-lg">Quarter 4</p>
+                  <ul className="list-disc pl-5">
+                    {Q4.map((project, index) => (
+                      <li key={index}>
+                        <span className="font-bold">{project.name}</span>
+                        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mb-4">
+                  <p className="font-bold text-black text-lg">Year 2025</p>
+                  <ul className="list-disc pl-5">
+                    {Q4.map((project, index) => (
+                      <li key={index}>
+                        <span className="font-bold">{project.name}</span>
+                        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="px-6 py-4 flex justify-end">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
                 >
-                  <ClusteredBarchat1
-                    chartData={userproject}
-                    xTitle={xTitleGraph}
-                    unit={"3"}
-                    legend={legend}
-                    lgd={showlegend}
-                    yTitle="Project Duration"
-                    product={"Grain"}
-                  />
-                </div>
-                {/* <CardWinrate winRate={{ totalContracts: 0, wonContracts: 0, winRate: 0 }} /> */}
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
-          { showModal && (
-    <div className="fixed inset-0 z-10 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        <div className="relative bg-white dark:bg-slate-800 rounded-lg overflow-hidden shadow-xl transform transition-all ">
-          <div className="px-6 py-4">
-            <div className="text-lg font-semibold mb-2">Project Duration</div>
-            <div className="mb-4">
-  <p className="font-bold text-black  text-lg">Quater 1</p>
-  <ul className="list-disc pl-5">
-    {/* Map over projects for Quater 1 */}
-    {Q1.map((project, index) => (
-      <li key={index}>
-        <span className="font-bold">{project.name}</span> 
-        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
-      </li>
-    ))}
-  </ul>
-</div>
-<div className="mb-4">
-<p className="font-bold text-black  text-lg">Quater 2</p>
-  <ul className="list-disc pl-5">
-    {/* Map over projects for Quater 2 */}
-    {Q2.map((project, index) => (
-      <li key={index}>
-        <span className="font-bold">{project.name}</span> 
-        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
-      </li>
-    ))}
-  </ul>
-</div>
-<div className="mb-4">
-<p className="font-bold text-black  text-lg">Quater 3</p>
-  <ul className="list-disc pl-5">
-    {/* Map over projects for Quater 3 */}
-    {Q3.map((project, index) => (
-      <li key={index}>
-        <span className="font-bold">{project.name}</span> 
-        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
-      </li>
-    ))}
-  </ul>
-</div>
-<div className="mb-4">
-<p className="font-bold text-black  text-lg">Quater 4</p>
-  <ul className="list-disc pl-5">
-    {/* Map over projects for Quater 4 */}
-    {Q4.map((project, index) => (
-      <li key={index}>
-        <span className="font-bold">{project.name}</span> 
-        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
-      </li>
-    ))}
-  </ul>
-</div>
-<div className="mb-4">
-<p className="font-bold text-black  text-lg">Year 2025</p>
-  <ul className="list-disc pl-5">
-    {/* Map over projects for Quater 4 */}
-    {Q4.map((project, index) => (
-      <li key={index}>
-        <span className="font-bold">{project.name}</span> 
-        <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
-      </li>
-    ))}
-  </ul>
+      )}
+    </main>
+  </div>
 </div>
 
-          </div>
-          <div className="px-6 py-4 flex justify-end">
-            
-            <button
-              onClick={() => setShowModal(false)}
-              className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )}
-
-        </main>
-
-      </div>
-    </div>
   );
 }
 
