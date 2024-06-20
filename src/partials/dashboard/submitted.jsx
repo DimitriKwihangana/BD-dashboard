@@ -34,8 +34,8 @@ function Submitted() {
   
 
   const ProjectsFilter = projects.filter(project => project.status === 'Waiting');
-  console.log(clients,'clients')
-  
+
+  console.log(ProjectsFilter,'projects')
 const getClientName = (clientId) => {
     const client = clients.find(client => client.id === clientId);
    
@@ -92,7 +92,7 @@ const getClientName = (clientId) => {
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden m-5">
         <div className="col-span-full xl:col-span-6 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 ">
           <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
-            <h2 className="font-semibold text-slate-800 dark:text-slate-100">Running  Projects</h2>
+            <h2 className="font-semibold text-slate-800 dark:text-slate-100">Submitted & Waiting  Projects</h2>
           </header>
           <div className="p-3">
             {/* Table */}
@@ -112,8 +112,9 @@ const getClientName = (clientId) => {
                     </th>
 
                     <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-center text-base">Status</div>
+                      <div className="font-semibold text-center text-base">Delivery date</div>
                     </th>
+
                     
                     <th className="p-2 whitespace-nowrap">
                       <div className="font-semibold text-center  text-base">Update status</div>
@@ -139,7 +140,7 @@ const getClientName = (clientId) => {
                         <div className="text-left">{project.sector}</div>
                       </td>
                       <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center text-green-500 p-2">{numberWithCommas(project.status)}</div>
+                        <div className="text-lg text-center text-blue-500 p-2">{project.deliverydate}</div>
                       </td>
                      
                       <td className="p-2 whitespace-nowrap flex justify-center">

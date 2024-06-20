@@ -30,7 +30,8 @@ function Dashboard({contractmoney, invoiced}) {
   const projects = useSelector((state) => state.data.projects);
 // filtering running projects
 
-  const ProjectsFilter = projects.filter(project => project.status === 'Project');
+  const ProjectsFilter = projects.filter(project => project.status === 'Waiting');
+  
 
 
     const [statusArrays, setStatusArrays] = useState({});
@@ -113,7 +114,7 @@ setPrepipeline(PrePipeline)
       datasets: [
         {
           ...prevState.datasets[0],
-          data: [competitive, singlesource, grantApplication, EOI, Proposals],
+          data: [competitive, singlesource, grantApplication, EOI, active],
         },
       ],
     }));
@@ -208,7 +209,7 @@ setPrepipeline(PrePipeline)
       "Trade Policy & Export Dev",
       "Private Sector Dev",
       "Education",
-      "climate & Env",
+      "Climate & Env",
       "Gender & Inclusion",
       "Finance",
       "Other",
@@ -221,7 +222,7 @@ setPrepipeline(PrePipeline)
           "Trade Policy & Export Dev",
           "Private Sector Dev",
           "Education",
-          "climate & Env",
+          "Climate & Env",
           "Gender & Inclusion",
           "Finance",
           "Other",
@@ -379,7 +380,7 @@ setPrepipeline(PrePipeline)
                 unit={"3"}
                 legend={legend}
                 lgd={showlegend}
-                yTitle="Project Duration"
+                yTitle="Delivery Duration"
                 product={"Grain"}
               />
             </div>
@@ -394,7 +395,7 @@ setPrepipeline(PrePipeline)
             </div>
             <div className="relative bg-white dark:bg-slate-800 rounded-lg overflow-hidden shadow-xl transform transition-all">
               <div className="px-6 py-4">
-                <div className="text-lg font-semibold mb-2">Project Duration</div>
+                <div className="text-lg font-semibold mb-2">Delivery Duration</div>
                 <div className="mb-4">
                   <p className="font-bold text-black text-lg">Quarter 1</p>
                   <ul className="list-disc pl-5">
