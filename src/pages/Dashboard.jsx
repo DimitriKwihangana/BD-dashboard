@@ -31,6 +31,8 @@ function Dashboard({contractmoney, invoiced}) {
 // filtering running projects
 
   const ProjectsFilter = projects.filter(project => project.status === 'Waiting');
+
+  
   
 
 
@@ -170,8 +172,8 @@ setPrepipeline(PrePipeline)
     const q2count = q2Projects? q2Projects.length :0;
     const q3count = q3Projects? q3Projects.length :0;
     const q4count = q4Projects? q4Projects.length :0;
-    const count2025 = projects2025? q1Projects.length :0;
-
+    const count2025 = projects2025? projects2025.length :0;
+  
     setUProject(prevState => ({
       ...prevState,
       datasets: [
@@ -443,7 +445,7 @@ setPrepipeline(PrePipeline)
                 <div className="mb-4">
                   <p className="font-bold text-black text-lg">Year 2025</p>
                   <ul className="list-disc pl-5">
-                    {Q4.map((project, index) => (
+                    {year2025.map((project, index) => (
                       <li key={index}>
                         <span className="font-bold">{project.name}</span>
                         <span className="text-green-500 font-semibold"> - {project.deliverydate}</span>
